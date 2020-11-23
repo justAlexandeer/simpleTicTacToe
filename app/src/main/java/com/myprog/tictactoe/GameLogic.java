@@ -98,7 +98,6 @@ public class GameLogic {
         }
     }
 
-
     private boolean checkIsDraw(){
         for (int i = 0; i < gameField.length; i++) {
             for(int t = 0; t < gameField.length; t++){
@@ -127,7 +126,6 @@ public class GameLogic {
                     arrayImage[fromArrayToIndex(i, 2)].setColorFilter(Color.argb(255,255,0,0));
                     whoIsWin = enemyTurn;
                 }
-
                 return true;
             }
         }
@@ -189,10 +187,6 @@ public class GameLogic {
     public void dialogCreate(){
         final Dialog dialog = new Dialog(activity);
         LinearLayout linearLayout;
-
-        for(int i = 0; i < 9; i++){
-            arrayImage[i].setEnabled(false);
-        }
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -394,7 +388,6 @@ public class GameLogic {
         int res[] = checkTwoInaRow();
         int tmp;
         String text = new String(res[0]+ " " + res[1]);
-        Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
         if(res[0] == -1){
             int indexRandomCell1;
             int indexRandomCell2;
@@ -408,15 +401,21 @@ public class GameLogic {
             tmp = fromArrayToIndex(indexRandomCell1, indexRandomCell2);
             arrayImage[tmp].setImageResource(R.drawable.cross);
             arrayImage[tmp].setEnabled(false);
-            if(checkIsDraw() | checkIsWin())
+            if(checkIsDraw() | checkIsWin()){
                 dialogCreate();
+                return;
+            }
+            setEnabledButtons();
         }else{
             gameField[res[0]][res[1]] = enemyTurn;
             tmp = fromArrayToIndex(res[0], res[1]);
             arrayImage[tmp].setImageResource(R.drawable.cross);
             arrayImage[tmp].setEnabled(false);
-            if(checkIsDraw() | checkIsWin())
+            if(checkIsDraw() | checkIsWin()){
                 dialogCreate();
+                return;
+            }
+            setEnabledButtons();
         }
     }
 
@@ -468,6 +467,7 @@ public class GameLogic {
                 button1.setImageResource(R.drawable.circle);
                 button1.setEnabled(false);
                 gameField[0][0] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -477,6 +477,7 @@ public class GameLogic {
                         }
                     }
                 }, 500);
+
                 }
             });
 
@@ -486,6 +487,7 @@ public class GameLogic {
                 button2.setImageResource(R.drawable.circle);
                 button2.setEnabled(false);
                 gameField[0][1] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -503,6 +505,7 @@ public class GameLogic {
                 button3.setImageResource(R.drawable.circle);
                 button3.setEnabled(false);
                 gameField[0][2] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -520,6 +523,7 @@ public class GameLogic {
                 button4.setImageResource(R.drawable.circle);
                 button4.setEnabled(false);
                 gameField[1][0] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -537,6 +541,7 @@ public class GameLogic {
                 button5.setImageResource(R.drawable.circle);
                 button5.setEnabled(false);
                 gameField[1][1] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -554,6 +559,7 @@ public class GameLogic {
                 button6.setImageResource(R.drawable.circle);
                 button6.setEnabled(false);
                 gameField[1][2] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -571,6 +577,7 @@ public class GameLogic {
                 button7.setImageResource(R.drawable.circle);
                 button7.setEnabled(false);
                 gameField[2][0] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -588,6 +595,7 @@ public class GameLogic {
                 button8.setImageResource(R.drawable.circle);
                 button8.setEnabled(false);
                 gameField[2][1] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -605,6 +613,7 @@ public class GameLogic {
                 button9.setImageResource(R.drawable.circle);
                 button9.setEnabled(false);
                 gameField[2][2] = 2;
+                setDisabledButtons();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         if(checkIsDraw() | checkIsWin()){
@@ -616,5 +625,27 @@ public class GameLogic {
                 }, 500);
             }
         });
+    }
+
+    private void setDisabledButtons(){
+        int count = 0;
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(isTheCellFree(i,j))
+                    arrayImage[count].setEnabled(false);
+                count++;
+            }
+        }
+    }
+
+    private void setEnabledButtons(){
+        int count = 0;
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(isTheCellFree(i,j))
+                    arrayImage[count].setEnabled(true);
+                count++;
+            }
+        }
     }
 }
